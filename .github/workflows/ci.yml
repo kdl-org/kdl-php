@@ -1,0 +1,19 @@
+name: Project checks
+
+on: push
+
+jobs:
+  checks:
+    name: Project checks
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v2
+      - name: Install PHP lib dependencies
+        uses: php-actions/composer@v5
+        with:
+          php_version: 7.2
+      - name: Install task runner
+        run: sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
+      - name: Run checks
+        run: task checks
