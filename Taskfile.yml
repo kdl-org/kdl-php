@@ -1,0 +1,17 @@
+version: '3'
+
+tasks:
+    unit:
+        cmds:
+            - vendor/bin/phpunit
+    sa:
+        cmds:
+            - vendor/bin/phpstan analyse
+    cs:
+        cmds:
+            - vendor/bin/phpcs
+    csfix:
+        cmds:
+            - vendor/bin/phpcbf
+    checks:
+        deps: [ unit, cs, sa ]
