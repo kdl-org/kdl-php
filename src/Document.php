@@ -30,7 +30,7 @@ class Document implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return array_map(
-            function (NodeInterface $node) {
+            static function (NodeInterface $node): array {
                 return $node->jsonSerialize();
             },
             $this->getNodes()

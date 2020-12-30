@@ -1,7 +1,0 @@
-parameters:
-    level: 8
-    reportUnmatchedIgnoredErrors: false
-    checkMissingIterableValueType: false
-    paths:
-        - src
-        - tests

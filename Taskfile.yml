@@ -6,7 +6,7 @@ tasks:
             - vendor/bin/phpunit
     sa:
         cmds:
-            - vendor/bin/phpstan analyse
+            - vendor/bin/psalm
     cs:
         cmds:
             - vendor/bin/phpcs
