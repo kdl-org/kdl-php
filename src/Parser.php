@@ -6,12 +6,8 @@ namespace Shieldo\Kdl;
 
 class Parser
 {
-    /**
-     * @param string $kdl
-     * @return mixed
-     */
-    public function parse(string $kdl)
+    public function parse(string $kdl): Document
     {
-        //implement me!
+        return new Document([]);
     }
 }
