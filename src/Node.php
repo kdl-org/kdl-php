@@ -4,25 +4,10 @@ namespace Shieldo\Kdl;
 
 class Node implements NodeInterface
 {
-    /**
-     * @var string
-     */
-    private $name;
-
-    /**
-     * @var array
-     */
-    private $values;
-
-    /**
-     * @var array
-     */
-    private $properties;
-
-    /**
-     * @var array
-     */
-    private $children;
+    private string $name;
+    private array $values;
+    private array $properties;
+    private array $children;
 
     public function __construct(string $name, array $values, array $properties)
     {
