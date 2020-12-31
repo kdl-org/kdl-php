@@ -7,6 +7,9 @@ tasks:
     sa:
         cmds:
             - vendor/bin/psalm
+    sa-info:
+        cmds:
+            - vendor/bin/psalm --show-info=true
     cs:
         cmds:
             - vendor/bin/phpcs

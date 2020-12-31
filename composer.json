@@ -12,7 +12,11 @@
     "autoload": {
         "psr-4": {
             "Shieldo\\Kdl\\": "src"
-        }
+        },
+        "files": [
+            "src/grammar.php",
+            "src/helpers.php"
+        ]
     },
     "autoload-dev": {
         "psr-4": {
@@ -20,7 +24,8 @@
         }
     },
     "require": {
-        "php": ">=7.2.5"
+        "php": ">=7.4",
+        "mathiasverraes/parsica": "^0.6.1"
     },
     "require-dev": {
         "phpunit/phpunit": "^8.5.13",

@@ -9,10 +9,7 @@ use Shieldo\Kdl\Parser;
 
 class ParserTest extends TestCase
 {
-    /**
-     * @var Parser
-     */
-    private $parser;
+    private Parser $parser;
 
     protected function setUp(): void
     {
@@ -26,7 +23,8 @@ class ParserTest extends TestCase
      */
     public function testNodes(array $expectedNodeShape, string $kdl): void
     {
-        self::assertEquals($expectedNodeShape, $this->parser->parse($kdl)->jsonSerialize());
+        $result = $this->parser->parse($kdl);
+        self::assertEquals($expectedNodeShape, $result->jsonSerialize());
     }
 
     public function kdlNodes(): array
@@ -34,7 +32,7 @@ class ParserTest extends TestCase
         $suite = json_decode(file_get_contents(__DIR__ . '/suite.json') ?: '', true);
         $testData = [];
         foreach ($suite as $suiteName => $suiteData) {
-            $testData[] = [$suiteData, $this->getKdlFile($suiteName)];
+            $testData[] = [$this->completeSuiteNodes($suiteData), $this->getKdlFile($suiteName)];
         }
 
         return $testData;
@@ -52,7 +50,7 @@ class ParserTest extends TestCase
                 return array_merge(
                     [
                         'values' => [],
-                        'properties' => [],
+                        'properties' => (object)[],
                         'children' => [],
                     ],
                     $node

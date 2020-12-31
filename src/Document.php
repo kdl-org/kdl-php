@@ -10,9 +10,9 @@ namespace Shieldo\Kdl;
 class Document implements \JsonSerializable
 {
     /**
-     * @var NodeInterface[]
+     * @var array<NodeInterface>
      */
-    private $nodes;
+    private array $nodes;
 
     public function __construct(array $nodes)
     {
