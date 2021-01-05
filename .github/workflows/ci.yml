@@ -9,10 +9,13 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v2
-      - name: Install PHP lib dependencies
-        uses: php-actions/composer@v5
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
         with:
-          php_version: 7.2
+          php-version: 7.2
+          tools: composer:v2
+      - name: Install PHP lib dependencies
+        run: composer install
       - name: Install task runner
         run: sudo sh -c "$(curl --location https://taskfile.dev/install.sh)" -- -d -b /usr/local/bin
       - name: Run checks
