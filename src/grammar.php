@@ -6,7 +6,9 @@ namespace Shieldo\Kdl;
 
 use Verraes\Parsica\Parser;
 
-use function Verraes\Parsica\{assemble,
+use function Verraes\Parsica\{andPred,
+    anySingleBut,
+    assemble,
     atLeastOne,
     anything,
     between,
@@ -14,6 +16,7 @@ use function Verraes\Parsica\{assemble,
     char,
     choice,
     collect,
+    crlf,
     digitChar,
     either,
     eof,
@@ -22,6 +25,7 @@ use function Verraes\Parsica\{assemble,
     keepFirst,
     keepSecond,
     noneOfS,
+    notPred,
     octDigitChar,
     oneOfS,
     optional,
@@ -109,6 +113,7 @@ function nodePropsAndArgs(): Parser
 function nodeSpace(): Parser
 {
     return either(assemble(zeroOrMore(ws()), escline(), zeroOrMore(ws())), atLeastOne(ws()))
+        ->map(fn($x) => null)
         ->label('node-space');
 }
 
@@ -172,22 +177,33 @@ function escapedString(): Parser
 
 function character(): Parser
 {
-    return either(assemble(char('\\'), escape()), noneOfS("\\\""))
+    return either(keepSecond(char('\\'), escape()), noneOfS("\\\""))
         ->label('character');
 }
 
 function escape(): Parser
 {
     return either(
-        collect(char('\\'), oneOfS('bfnrt')),
-        collect(string("u{"), repeat(6, optional(hexDigitChar())), char('}')),
+        oneOfS('"\\/bfnrt')
+            ->map(function (string $val): string {
+                $escapes = [
+                    'b' => "\u{08}",
+                    'f' => "\u{0C}",
+                    'n' => "\n",
+                    'r' => "\r",
+                    't' => "\t",
+                ];
+                return $escapes[$val] ?? $val;
+            }),
+        assemble(string("u{"), repeat(6, optional(hexDigitChar())), char('}'))
+            ->map(fn($val): string => '\\' . $val),
     )
         ->label('escape');
 }
 
 function rawString(): Parser
 {
-    return assemble(char('r'), rawStringHash())
+    return keepSecond(char('r'), rawStringHash())
         ->label('raw-string');
 }
 
@@ -195,7 +211,7 @@ function rawStringHash(): Parser
 {
     $hashParser = recursive();
     $hashParser->recurse(
-        either(assemble(char('#'), $hashParser, char('#')), rawStringQuotes())
+        either(between(char('#'), char('#'), $hashParser), rawStringQuotes())
     );
 
     return $hashParser
@@ -204,7 +220,7 @@ function rawStringHash(): Parser
 
 function rawStringQuotes(): Parser
 {
-    return between(char('"'), char('"'), zeroOrMore(anything()))
+    return between(char('"'), char('"'), zeroOrMore(anySingleBut('"')))
         ->label('raw-string-quotes');
 }
 
@@ -216,12 +232,20 @@ function number(): Parser
 
 function decimal(): Parser
 {
-    return collect(integer(), optional(assemble(char('.'), zeroOrMore(digitChar()))), optional(exponent()))
+    return collect(
+        integer(),
+        optional(assemble(char('.'), digitChar(), zeroOrMore(either(digitChar(), char('_'))))),
+        optional(exponent()),
+    )
         ->map(function (array $collection) {
-            [, $fraction, $exponent] = $collection;
+            [$integer, $fraction, $exponent] = $collection;
             $useInt = $fraction === null && $exponent === null;
             $assembly = implode('', array_filter(
-                $collection,
+                [
+                    $integer,
+                    $fraction ? str_replace('_', '', $fraction) : null,
+                    $exponent,
+                ],
                 fn($x): bool => $x !== null,
             ));
             return $useInt ? (int) $assembly : (float) $assembly;
@@ -278,7 +302,7 @@ function boolean(): Parser
 
 function escline(): Parser
 {
-    return collect(string('\\'), zeroOrMore(ws()), either(singleLineComment(), newline()))
+    return assemble(string('\\'), zeroOrMore(ws()), either(singleLineComment(), newline()))
         ->label('escline');
 }
 
@@ -291,7 +315,7 @@ function linespace(): Parser
 function newline(): Parser
 {
     return either(
-        string("\u{0D}\u{0A}"),
+        crlf(),
         satisfy(isCharCode([
             0x0D,
             0x0A,
@@ -300,6 +324,21 @@ function newline(): Parser
             0x2028,
             0x2029,
         ]))
+    );
+}
+
+function notNewline(): Parser
+{
+    //constructing the complement of newline()
+    return satisfy(
+        notPred(isCharCode([
+            0x0D,
+            0x0A,
+            0x85,
+            0x0C,
+            0x2028,
+            0x2029,
+        ])),
     );
 }
 
@@ -345,12 +384,16 @@ function unicodeSpace(): Parser
 
 function singleLineComment(): Parser
 {
-    return between(string("//"), newline(), atLeastOne(anything()))
+    return between(string("//"), either(newline(), eof()), atLeastOne(notNewline()))
         ->label('single-line-comment');
 }
 
 function multiLineComment(): Parser
 {
-    return between(string("/*"), string("*/"), zeroOrMore(anything()))
+    return between(
+        string("/*"),
+        string("*/"),
+        zeroOrMore(either(anySingleBut('*'), char('*')->notFollowedBy(char('/')))),
+    )
         ->label('multi-line-comment');
 }

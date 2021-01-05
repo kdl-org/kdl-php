@@ -10,13 +10,11 @@ class Parser
 {
     public function parse(string $kdl): Document
     {
-        $result = self::parser()->tryString($kdl);
-//        var_dump($result->remainder());
-        return $result->output();
+        return self::parser()->tryString($kdl)->output();
     }
 
     private static function parser(): ParsicaParser
     {
-        return nodes();
+        return nodes()->thenEof();
     }
 }
