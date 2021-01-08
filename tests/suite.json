@@ -66,5 +66,320 @@
   ],
   "nodes_9": [
     { "name": "node", "properties": { "key": 2, "apple": "green" } }
+  ],
+  "website": [
+    { "name": "doctype", "values": ["html"] },
+    {
+      "name": "html",
+      "properties": { "lang": "en" },
+      "children": [
+        {
+          "name": "head",
+          "children": [
+            {
+              "name": "meta",
+              "properties": { "charset": "utf-8" }
+            },
+            {
+              "name": "meta",
+              "properties": {
+                "name": "viewport",
+                "content": "width=device-width, initial-scale=1.0"
+              }
+            },
+            {
+              "name": "meta",
+              "properties": {
+                "name": "description",
+                "content": "kdl is a document language, mostly based on SDLang, with xml-like semantics that looks like you're invoking a bunch of CLI commands!"
+              }
+            },
+            {
+              "name": "title",
+              "values": ["kdl - Kat's Document Language"]
+            },
+            {
+              "name": "link",
+              "properties": {
+                "rel": "stylesheet",
+                "href": "/styles/global.css"
+              }
+            }
+          ]
+        },
+        {
+          "name": "body",
+          "children": [
+            {
+              "name": "main",
+              "children": [
+                {
+                  "name": "header",
+                  "properties": { "class": "py-10 bg-gray-300" },
+                  "children": [
+                    {
+                      "name": "h1",
+                      "properties": { "class": "text-4xl text-center" },
+                      "values": ["kdl - Kat's Document Language"]
+                    }
+                  ]
+                },
+                {
+                  "name": "section",
+                  "properties": {
+                    "class": "kdl-section",
+                    "id": "description"
+                  },
+                  "children": [
+                    {
+                      "name": "p",
+                      "children": [
+                        {
+                          "name": "text",
+                          "values": ["kdl is a document language, mostly based on "]
+                        },
+                        {
+                          "name": "a",
+                          "properties": { "href": "https://sdlang.org" },
+                          "values": ["SDLang"]
+                        },
+                        {
+                          "name": "text",
+                          "values": [" with xml-like semantics that looks like you're invoking a bunch of CLI commands"]
+                        }
+                      ]
+                    },
+                    {
+                      "name": "p",
+                      "values": ["It's meant to be used both as a serialization format and a configuration language, and is relatively light on syntax compared to XML."]
+                    }
+                  ]
+                },
+                {
+                  "name": "section",
+                  "properties": {
+                    "class": "kdl-section",
+                    "id": "design-and-discussion"
+                  },
+                  "children": [
+                    {
+                      "name": "h2",
+                      "values": ["Design and Discussion"]
+                    },
+                    {
+                      "name": "p",
+                      "children": [
+                        {
+                          "name": "text",
+                          "values": ["kdl is still extremely new, and discussion about the format should happen over on the "]
+                        },
+                        {
+                          "name": "a",
+                          "properties": { "href": "https://github.com/kdoclang/kdl/discussions" },
+                          "children": [
+                            {
+                              "name": "text",
+                              "values": ["discussions"]
+                            }
+                          ]
+                        },
+                        {
+                          "name": "text",
+                          "values": [" page in the Github repo. Feel free to jump in and give us your 2 cents!"]
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "name": "section",
+                  "properties": {
+                    "class": "kdl-section",
+                    "id": "design-principles"
+                  },
+                  "children": [
+                    {
+                      "name": "h2",
+                      "values": ["Design Principles"]
+                    },
+                    {
+                      "name": "ol",
+                      "children": [
+                        {
+                          "name": "li",
+                          "values": ["Maintainability"]
+                        },
+                        {
+                          "name": "li",
+                          "values": ["Flexibility"]
+                        },
+                        {
+                          "name": "li",
+                          "values": ["Cognitive simplicity and Learnability"]
+                        },
+                        {
+                          "name": "li",
+                          "values": ["Ease of de/serialization"]
+                        },
+                        {
+                          "name": "li",
+                          "values": ["Ease of implementation"]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "ci": [
+    {
+      "name": "name",
+      "values": ["CI"]
+    },
+    {
+      "name": "on",
+      "values": ["push", "pull_request"]
+    },
+    {
+      "name": "env",
+      "children": [
+        {
+          "name": "RUSTFLAGS",
+          "values": ["-Dwarnings"]
+        }
+      ]
+    },
+    {
+      "name": "jobs",
+      "children": [
+        {
+          "name": "fmt_and_docs",
+          "values": ["Check fmt & build docs"],
+          "children": [
+            {
+              "name": "runs-on",
+              "values": ["ubuntu-latest"]
+            },
+            {
+              "name": "steps",
+              "children": [
+                {
+                  "name": "step",
+                  "properties": { "uses": "actions/checkout@v1" }
+                },
+                {
+                  "name": "step",
+                  "values": ["Install Rust"],
+                  "properties": { "uses": "actions-rs/toolchain@v1" },
+                  "children": [
+                    {
+                      "name": "profile",
+                      "values": ["minimal"]
+                    },
+                    {
+                      "name": "toolchain",
+                      "values": ["stable"]
+                    },
+                    {
+                      "name": "components",
+                      "values": ["rustfmt"]
+                    },
+                    {
+                      "name": "override",
+                      "values": [true]
+                    }
+                  ]
+                },
+                {
+                  "name": "step",
+                  "values": ["rustfmt"],
+                  "properties": { "run": "cargo fmt --all -- --check" }
+                },
+                {
+                  "name": "step",
+                  "values": ["docs"],
+                  "properties": { "run": "cargo doc --no-deps" }
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "name": "build_and_test",
+          "values": ["Build & Test"],
+          "children": [
+            {
+              "name": "runs-on",
+              "values": ["${{ matrix.os }}"]
+            },
+            {
+              "name": "strategy",
+              "children": [
+                {
+                  "name": "matrix",
+                  "children": [
+                    {
+                      "name": "rust",
+                      "values": ["1.46.0", "stable"]
+                    },
+                    {
+                      "name": "os",
+                      "values": ["ubuntu-latest", "macOS-latest", "windows-latest"]
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "name": "steps",
+              "children": [
+                {
+                  "name": "step",
+                  "properties": { "uses": "actions/checkout@v1" }
+                },
+                {
+                  "name": "step",
+                  "values": ["Install Rust"],
+                  "properties": { "uses": "actions-rs/toolchain@v1" },
+                  "children": [
+                    {
+                      "name": "profile",
+                      "values": ["minimal"]
+                    },
+                    {
+                      "name": "toolchain",
+                      "values": ["${{ matrix.rust }}"]
+                    },
+                    {
+                      "name": "components",
+                      "values": ["clippy"]
+                    },
+                    {
+                      "name": "override",
+                      "values": [true]
+                    }
+                  ]
+                },
+                {
+                  "name": "step",
+                  "values": ["Clippy"],
+                  "properties": { "run": "cargo clippy --all -- -D warnings" }
+                },
+                {
+                  "name": "step",
+                  "values": ["Run tests"],
+                  "properties": { "run": "cargo test --all --verbose" }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
   ]
 }
