@@ -10,7 +10,6 @@ use function Verraes\Parsica\{andPred,
     anySingleBut,
     assemble,
     atLeastOne,
-    anything,
     between,
     binDigitChar,
     char,
@@ -33,6 +32,7 @@ use function Verraes\Parsica\{andPred,
     recursive,
     repeat,
     satisfy,
+    sepBy,
     sequence,
     string,
     zeroOrMore};
@@ -63,27 +63,51 @@ function nodes(): Parser
                 optional(assemble(string("/-"), zeroOrMore(ws()))),
                 identifier(),
             ),
-            zeroOrMore(
-                keepSecond(
-                    nodeSpace(),
-                    nodePropsAndArgs()
-                )
-            )->map(fn(array $propsAndArgs) => array_merge_recursive($propsAndArgs)),
+            optional(nodeSpace()),
+            sepBy(
+                nodeSpace(),
+                nodePropsAndArgs(),
+            )->map(
+                function (?array $propsAndArgs): array {
+                    return [
+                        'values'     => array_merge(
+                            ...array_map(
+                                fn(array $struct) => $struct['values'],
+                                array_filter(
+                                    $propsAndArgs ?? [],
+                                    fn(array $struct) => array_key_exists('values', $struct)
+                                ),
+                            )
+                        ),
+                        'properties' => array_merge(
+                            ...array_map(
+                                fn(array $struct) => $struct['properties'],
+                                array_filter(
+                                    $propsAndArgs ?? [],
+                                    fn(array $struct) => array_key_exists('properties', $struct),
+                                ),
+                            )
+                        ),
+                    ];
+                }
+            ),
             keepFirst(
                 optional(between(zeroOrMore(nodeSpace()), zeroOrMore(ws()), $nodeChildrenParser)),
                 nodeTerminator(),
             ),
         )->map(function (array $collection): NodeInterface {
-            [$identifier, $nodePropsAndArgs, $children] = $collection;
+            [$identifier, , $nodePropsAndArgs, $children] = $collection;
             $node = new Node(
                 $identifier,
                 $nodePropsAndArgs['values'] ?? [],
                 $nodePropsAndArgs['properties'] ?? [],
             );
-            //@TODO: attach children
-            //foreach ($children as $child) {
-            //    $node->attachChild($child);
-            //}
+            if (is_array($children)) {
+                foreach ($children as $child) {
+                    $node->attachChild($child);
+                }
+            }
+
             return $node;
         })
     );
@@ -91,9 +115,14 @@ function nodes(): Parser
 
     $nodeChildrenParser->recurse(
         collect(
-            optional(assemble(string("/-"), zeroOrMore(ws()))),
+            optional(assemble(string("/-"), zeroOrMore(ws())))
+                ->map(fn($x) => (bool) $x),
             between(char('{'), char('}'), $nodesParser)
-        )
+        )->map(function (array $args) {
+            [$isSlashDashComment, $nodes] = $args;
+
+            return (!$isSlashDashComment) ? $nodes : null;
+        })
     );
     $nodeChildrenParser->label('node-children');
 
@@ -103,10 +132,16 @@ function nodes(): Parser
 
 function nodePropsAndArgs(): Parser
 {
-    return keepSecond(
-        optional(assemble(string("/-"), zeroOrMore(ws()))),
+    return collect(
+        optional(assemble(string("/-"), zeroOrMore(ws())))
+            ->map(fn($x) => (bool) $x),
         either(prop(), value())
     )
+        ->map(function (array $args) {
+            [$isSlashDashComment, $propOrArg] = $args;
+
+            return (!$isSlashDashComment) ? $propOrArg : [];
+        })
         ->label('node-props-and-args');
 }
 
@@ -152,7 +187,7 @@ function identifierChar(): Parser
 function prop(): Parser
 {
     return collect(identifier(), char('='), value())
-        ->map(fn(array $collected) => ['properties' => [$collected[0] => $collected[2]]])
+        ->map(fn(array $collected) => ['properties' => [$collected[0] => $collected[2]['values'][0]]])
         ->label('prop');
 }
 

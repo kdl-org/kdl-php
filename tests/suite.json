@@ -38,5 +38,33 @@
     { "name": "node", "values": [true] },
     { "name": "node", "values": [false] },
     { "name": "node", "values": [null] }
+  ],
+  "nodes_1": [
+    { "name": "node" }
+  ],
+  "nodes_2": [
+    { "name": "node" }
+  ],
+  "nodes_3": [
+    { "name": "node" }
+  ],
+  "nodes_4": [
+    { "name": "node1" },
+    { "name": "node2" }
+  ],
+  "nodes_5": [
+    { "name": "node" }
+  ],
+  "nodes_6": [
+    { "name": "node", "values": [1, 2, "3", true, false, null] }
+  ],
+  "nodes_7": [
+    { "name": "node", "children": [ { "name": "node2" } ] }
+  ],
+  "nodes_8": [
+    { "name": "node", "children": [ { "name": "node2" } ] }
+  ],
+  "nodes_9": [
+    { "name": "node", "properties": { "key": 2, "apple": "green" } }
   ]
 }
