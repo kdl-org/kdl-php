@@ -7,7 +7,7 @@ namespace Shieldo\Kdl;
 /**
  * Class for an object that represents a KDL document, providing accessors to nodes.
  */
-class Document implements \JsonSerializable
+class Document implements \JsonSerializable, \IteratorAggregate
 {
     /**
      * @var array<NodeInterface>
@@ -35,5 +35,10 @@ class Document implements \JsonSerializable
             },
             $this->getNodes()
         );
+    }
+
+    public function getIterator(): \Traversable
+    {
+        return new \ArrayIterator($this->getNodes());
     }
 }
