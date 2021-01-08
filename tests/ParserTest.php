@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shieldo\Kdl\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Shieldo\Kdl\ParseException;
 use Shieldo\Kdl\Parser;
 
 class ParserTest extends TestCase
@@ -36,6 +37,13 @@ class ParserTest extends TestCase
         }
 
         return $testData;
+    }
+
+    public function testParseFail(): void
+    {
+        $badKdl = "node node";
+        $this->expectException(ParseException::class);
+        $this->parser->parse($badKdl);
     }
 
     private function getKdlFile(string $name): string
