@@ -1,6 +1,8 @@
 # KDL-PHP
 
-A PHP library for the [KDL Document Language](https://github.com/kdl-org/kdl).
+A PHP library for the [KDL Document Language](https://kdl.dev) (pronounced like "cuddle").
+
+![alt text](./kdl.svg "KDL logo")
 
 ## Limitations
 
