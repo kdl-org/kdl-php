@@ -46,14 +46,21 @@ class ParserTest extends TestCase
     private function completeSuiteNodes(array $nodeData): array
     {
         return array_map(
-            static function ($node) {
+            function ($node) {
                 return array_merge(
                     [
                         'values' => [],
                         'properties' => (object)[],
-                        'children' => [],
                     ],
-                    $node
+                    array_merge(
+                        $node,
+                        [
+                            'children' => (array_key_exists('children', $node))
+                                ? $this->completeSuiteNodes($node['children'])
+                                : [],
+                            'properties' => (object) ($node['properties'] ?? []),
+                        ]
+                    ),
                 );
             },
             $nodeData

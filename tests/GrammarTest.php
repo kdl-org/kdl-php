@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Shieldo\Kdl\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Shieldo\Kdl\Document;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParserHasFailed;
 
@@ -12,6 +13,7 @@ use function Shieldo\Kdl\{boolean,
     escline,
     multiLineComment,
     newline,
+    nodes,
     nodeSpace,
     number,
     singleLineComment,
@@ -257,6 +259,97 @@ EOT
             ["\r\n", ''],
             ["\n\n", "\n"],
             ['blah', self::ERROR],
+        ];
+    }
+
+    /**
+     * @dataProvider nodesWithSlashdashComments
+     * @param string $input
+     * @param string $remainder
+     */
+    public function testNodesWithSlashdashComments(string $input, string $remainder): void
+    {
+        $this->makeRemainderAssertionsForParser($input, $remainder, nodes());
+    }
+
+    public function nodesWithSlashdashComments(): array
+    {
+        return [
+            ["/-node", ''],
+            ["/- node", ''],
+            ["/- node\n", ''],
+            ["/-node 1 2 3", ''],
+            ["/-node key=false", ''],
+            ["/-node{\nnode\n}", ''],
+            ["/-node 1 2 3 key=\"value\" \\\n{\nnode\n}", ''],
+        ];
+    }
+
+    /**
+     * @dataProvider argSlashdashComments
+     * @param string $input
+     * @param array  $values
+     */
+    public function testArgSlashdashComments(string $input, array $values): void
+    {
+        /** @var Document $parsed */
+        $parsed = nodes()->thenEof()->tryString($input)->output();
+        self::assertInstanceOf(Document::class, $parsed);
+        self::assertEquals($values, $parsed->getNodes()[0]->getValues());
+    }
+
+    public function argSlashdashComments(): array
+    {
+        return [
+            ["node /-1", []],
+            ["node /-1 2", [2]],
+            ["node 1 /- 2 3", [1, 3]],
+            ["node /--1", []],
+            ["node /- -1", []],
+            ["node \\\n/- -1", []],
+        ];
+    }
+
+    /**
+     * @dataProvider propSlashdashComments
+     * @param string $input
+     * @param array  $properties
+     */
+    public function testPropSlashdashComments(string $input, array $properties): void
+    {
+        /** @var Document $parsed */
+        $parsed = nodes()->thenEof()->tryString($input)->output();
+        self::assertInstanceOf(Document::class, $parsed);
+        self::assertEquals($properties, $parsed->getNodes()[0]->getProperties());
+    }
+
+    public function propSlashdashComments(): array
+    {
+        return [
+            ["node /-key=1", []],
+            ["node /- key=1", []],
+            ["node key=1 /-key2=2", ['key' => 1]],
+        ];
+    }
+
+    /**
+     * @dataProvider childrenSlashDashComments
+     * @param string $input
+     */
+    public function testChildrenSlashDashComments(string $input): void
+    {
+        /** @var Document $parsed */
+        $parsed = nodes()->thenEof()->tryString($input)->output();
+        self::assertInstanceOf(Document::class, $parsed);
+        self::assertCount(0, $parsed->getNodes()[0]->getChildren());
+    }
+
+    public function childrenSlashDashComments(): array
+    {
+        return [
+            ["node /-{}"],
+            ["node /- {}"],
+            ["node /-{\nnode2\n}"],
         ];
     }
 
