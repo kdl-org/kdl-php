@@ -16,3 +16,13 @@ function isCharBetween(int $from, int $to): callable
 {
     return static fn(string $x): bool => $from <= mb_ord($x) && mb_ord($x) <= $to;
 }
+
+function memo(string $name, callable $parserFactory): Parser
+{
+    static $memo = [];
+    if (!array_key_exists($name, $memo)) {
+        $memo[$name] = $parserFactory();
+    }
+
+    return $memo[$name];
+}
