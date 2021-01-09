@@ -8,7 +8,7 @@ A PHP library for the [KDL Document Language](https://kdl.dev) (pronounced like 
 
 For now, this library only supports parsing.
 
-Parsing is slow for now - for example, parsing a 45 line file with a tree depth of 5 is likely to take 250-300ms. This library favours correctness over performance - however, the aim is to optimise the parsing to a point of reasonable speed.
+Parsing is quite slow for now - for example, parsing a 45 line file with a tree depth of 5 is likely to take about 60ms. This library favours correctness over performance - however, the aim is to optimise the parsing to a point of reasonable speed.
 
 The parser uses [Parsica](https://parsica.verraes.net/) as an underlying parsing library in order to map fairly directly and clearly onto the published KDL grammar - Parsica uses FP principles, and one result of this is that the call stack depth used during parsing may be high. Be warned if you are using e.g. xdebug, as parsing may exceed any normal maximum stack depth that you may set.
 
