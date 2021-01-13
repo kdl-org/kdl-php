@@ -4,6 +4,12 @@ A PHP library for the [KDL Document Language](https://kdl.dev) (pronounced like 
 
 ![alt text](./kdl.svg "KDL logo")
 
+## Installation
+
+The KDL library can be included to your project using Composer:
+
+`composer require kdl/kdl`
+
 ## Limitations
 
 For now, this library only supports parsing.
