@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shieldo\Kdl;
+namespace Kdl\Kdl;
 
 /**
  * Class for an object that represents a KDL document, providing accessors to nodes.

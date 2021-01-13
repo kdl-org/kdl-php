@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Shieldo\Kdl\Tests;
+namespace Kdl\Kdl\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Shieldo\Kdl\Node;
-use Shieldo\Kdl\NodeInterface;
+use Kdl\Kdl\Node;
+use Kdl\Kdl\NodeInterface;
 
 class NodeTest extends TestCase
 {

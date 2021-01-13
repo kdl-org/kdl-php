@@ -15,7 +15,7 @@ The parser uses [Parsica](https://parsica.verraes.net/) as an underlying parsing
 ## Examples
 
 ```php
-$document = Shieldo\Kdl\Kdl::parse($kdlString);
+$document = Kdl\Kdl\Kdl::parse($kdlString);
 foreach ($document as $node) {
     $node->getName(); //gets the name for the node @see https://github.com/kdl-org/kdl/blob/main/SPEC.md#node
     $node->getValues(); //gets a list of values for a node @see https://github.com/kdl-org/kdl/blob/main/SPEC.md#value

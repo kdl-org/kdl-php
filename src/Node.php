@@ -1,6 +1,6 @@
 <?php
 
-namespace Shieldo\Kdl;
+namespace Kdl\Kdl;
 
 class Node implements NodeInterface
 {
