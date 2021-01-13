@@ -1,3 +1,5 @@
+[![Latest Stable Version](https://poser.pugx.org/kdl/kdl/v)](//packagist.org/packages/kdl/kdl) [![License](https://poser.pugx.org/kdl/kdl/license)](//packagist.org/packages/kdl/kdl) ![Status](https://github.com/kdl-org/kdl-php/workflows/Project%20checks/badge.svg?branch=main)
+
 # KDL-PHP
 
 A PHP library for the [KDL Document Language](https://kdl.dev) (pronounced like "cuddle").
