@@ -24,6 +24,8 @@ class Parser
                 0,
                 $e,
             );
+        } finally {
+            clearMemo();
         }
     }
 }
