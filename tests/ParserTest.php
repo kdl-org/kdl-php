@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Shieldo\Kdl\Tests;
+namespace Kdl\Kdl\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Shieldo\Kdl\ParseException;
-use Shieldo\Kdl\Parser;
+use Kdl\Kdl\ParseException;
+use Kdl\Kdl\Parser;
 
 class ParserTest extends TestCase
 {

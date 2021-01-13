@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Shieldo\Kdl\Tests;
+namespace Kdl\Kdl\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Shieldo\Kdl\Document;
+use Kdl\Kdl\Document;
 use Verraes\Parsica\Parser;
 use Verraes\Parsica\ParserHasFailed;
 
-use function Shieldo\Kdl\{boolean,
+use function Kdl\Kdl\{boolean,
     escline,
     multiLineComment,
     newline,

@@ -1,10 +1,10 @@
 <?php
 
-namespace Shieldo\Kdl\Tests;
+namespace Kdl\Kdl\Tests;
 
-use Shieldo\Kdl\Document;
+use Kdl\Kdl\Document;
 use PHPUnit\Framework\TestCase;
-use Shieldo\Kdl\NodeInterface;
+use Kdl\Kdl\NodeInterface;
 
 class DocumentTest extends TestCase
 {

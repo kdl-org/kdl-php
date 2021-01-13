@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shieldo\Kdl;
+namespace Kdl\Kdl;
 
 use Verraes\Parsica\ParserHasFailed;
 

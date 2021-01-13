@@ -1,6 +1,6 @@
 <?php
 
-namespace Shieldo\Kdl;
+namespace Kdl\Kdl;
 
 /**
  * Exception thrown when parsing KDL fails.

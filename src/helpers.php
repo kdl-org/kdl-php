@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Shieldo\Kdl;
+namespace Kdl\Kdl;
 
 use Verraes\Parsica\Internal\Assert;
 use Verraes\Parsica\Internal\EndOfStream;
