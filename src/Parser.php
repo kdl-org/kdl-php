@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Kdl\Kdl;
 
-use Verraes\Parsica\ParserHasFailed;
+use Parsica\Parsica\ParserHasFailed;
 
 class Parser
 {

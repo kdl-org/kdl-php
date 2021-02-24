@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace Kdl\Kdl;
 
-use Verraes\Parsica\Internal\Assert;
-use Verraes\Parsica\Internal\EndOfStream;
-use Verraes\Parsica\Internal\Fail;
-use Verraes\Parsica\Internal\Succeed;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\ParseResult;
-use Verraes\Parsica\Stream;
+use Parsica\Parsica\Internal\Assert;
+use Parsica\Parsica\Internal\EndOfStream;
+use Parsica\Parsica\Internal\Fail;
+use Parsica\Parsica\Internal\Succeed;
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\ParseResult;
+use Parsica\Parsica\Stream;
 
 function isCharBetween(int $from, int $to): callable
 {

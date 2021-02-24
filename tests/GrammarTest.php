@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Kdl\Kdl\Tests;
 
-use PHPUnit\Framework\TestCase;
 use Kdl\Kdl\Document;
-use Verraes\Parsica\Parser;
-use Verraes\Parsica\ParserHasFailed;
+use Parsica\Parsica\Parser;
+use Parsica\Parsica\ParserHasFailed;
+use PHPUnit\Framework\TestCase;
 
 use function Kdl\Kdl\{boolean,
     escline,
