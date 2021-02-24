@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Kdl\Kdl;
 
-use Verraes\Parsica\Parser;
+use Parsica\Parsica\Parser;
 
-use function Verraes\Parsica\{andPred,
+use function Parsica\Parsica\{andPred,
     anySingleBut,
     assemble,
     atLeastOne,
