@@ -16,5 +16,8 @@ tasks:
     csfix:
         cmds:
             - vendor/bin/phpcbf
+    bench:
+        cmds:
+            - vendor/bin/phpbench run tests/bench --report=default
     checks:
         deps: [ unit, cs, sa ]
