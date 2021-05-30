@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.4.0] - 2021-05-30
+
+### Changed
+- add a benchmark task in dev environment (`task bench`) using [PHPBench](https://phpbench.readthedocs.io/)
+- use Parsica release 0.8.1, giving an approx 2x speed-up vs previous release!
+
 ## [0.3.0] - 2021-02-24
 
 ### Changed
