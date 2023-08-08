@@ -55,6 +55,7 @@ EOT
             ['r#"foo"#', 'foo'],
             ['r##"foo"##', 'foo'],
             ['r"\nfoo\r"', '\nfoo\r'],
+            ['r#"foo"bar"#', 'foo"bar'],
             ['r##"foo"#', self::ERROR],
         ];
     }

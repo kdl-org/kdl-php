@@ -35,6 +35,7 @@ use function Parsica\Parsica\{andPred,
     sepBy,
     sequence,
     string,
+    takeWhile,
     zeroOrMore};
 
 function nodes(): Parser
@@ -276,33 +277,23 @@ function rawString(): Parser
 {
     return memo(
         __FUNCTION__,
-        fn() => keepSecond(char('r'), rawStringHash())
+        fn () => sequence(
+            char('r'),
+            keepFirst(zeroOrMore(char('#')), char('"'))
+                ->bind(static function (?string $hashes) {
+                    $end = '"' . ($hashes ?? '');
+                    $endLen = strlen($end);
+
+                    $tail = '';
+                    return takeWhile(static function (string $c) use (&$tail, $end, $endLen) {
+                        $result = $tail !== $end;
+                        $tail = substr($tail . $c, -$endLen);
+                        return $result;
+                    })
+                        ->map(static fn (string $chunk) => substr($chunk, 0, -$endLen));
+                })
+        )
             ->label('raw-string')
-    );
-}
-
-function rawStringHash(): Parser
-{
-    return memo(
-        __FUNCTION__,
-        function () {
-            $hashParser = recursive();
-            $hashParser->recurse(
-                either(between(char('#'), char('#'), $hashParser), rawStringQuotes())
-            );
-
-            return $hashParser
-                ->label('raw-string-hash');
-        }
-    );
-}
-
-function rawStringQuotes(): Parser
-{
-    return memo(
-        __FUNCTION__,
-        fn() => between(char('"'), char('"'), zeroOrMore(anySingleBut('"')))
-            ->label('raw-string-quotes')
     );
 }
 
