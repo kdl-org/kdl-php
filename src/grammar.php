@@ -6,7 +6,7 @@ namespace Kdl\Kdl;
 
 use Parsica\Parsica\Parser;
 
-use function Parsica\Parsica\{andPred,
+use function Parsica\Parsica\{
     anySingleBut,
     assemble,
     atLeastOne,
@@ -153,7 +153,7 @@ function nodeSpace(): Parser
     return memo(
         __FUNCTION__,
         fn() => either(assemble(zeroOrMore(ws()), escline(), zeroOrMore(ws())), atLeastOne(ws()))
-            ->map(fn($x) => null)
+            ->map(fn($_x) => null)
             ->label('node-space')
     );
 }

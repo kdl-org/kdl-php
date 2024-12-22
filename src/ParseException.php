@@ -8,5 +8,4 @@ namespace Kdl\Kdl;
  */
 class ParseException extends \InvalidArgumentException
 {
-
 }
